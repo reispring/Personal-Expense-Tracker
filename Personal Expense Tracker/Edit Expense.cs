@@ -62,7 +62,7 @@ namespace Personal_Expense_Tracker
             Db.Execute(query);
 
             MessageBox.Show("Expense updated successfully!");
-            this.Close(); // close the form after saving
+            this.Close(); 
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
