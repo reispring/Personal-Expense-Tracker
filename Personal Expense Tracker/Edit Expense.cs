@@ -6,38 +6,45 @@ namespace Personal_Expense_Tracker
 {
     public partial class Edit_Expense : Form
     {
+        private int currentID;
+        private Expense currentExpense;
+
+
         public Edit_Expense()
         {
             InitializeComponent();
         }
 
-        private int currentID = 0;
+
+        public Edit_Expense(int id) : this()
+        {
+            LoadExpense(id);
+        }
+
 
         public void LoadExpense(int id)
         {
             currentID = id;
+            currentExpense = Db.GetById<Expense>(id);
 
-            DataTable dt = Db.GetTable("SELECT * FROM Expenses WHERE ExpenseID = " + id);
-
-            if (dt.Rows.Count == 0)
+            if (currentExpense == null)
             {
                 MessageBox.Show("Record not found.");
                 this.Close();
                 return;
             }
 
-            DataRow row = dt.Rows[0];
-
-            txtAmount.Text = row["Amount"].ToString();
-            cbCategory.Text = row["Category"].ToString();
-            dtpDate.Value = Convert.ToDateTime(row["ExpenseDate"]);
-            txtDescription.Text = row["Description"].ToString();
+            txtAmount.Text = currentExpense.Amount.ToString("0.00");
+            cbCategory.Text = currentExpense.Category ?? "";
+            dtpDate.Value = currentExpense.ExpenseDate == default ? DateTime.Today : currentExpense.ExpenseDate;
+            txtDescription.Text = currentExpense.Description ?? "";
         }
+
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
 
-            if (!decimal.TryParse(txtAmount.Text, out decimal amount) || amount <= 0)
+            if (!decimal.TryParse(txtAmount.Text.Trim(), out decimal amount) || amount <= 0)
             {
                 MessageBox.Show("Please enter a valid positive amount.");
                 return;
@@ -45,26 +52,35 @@ namespace Personal_Expense_Tracker
 
             if (string.IsNullOrWhiteSpace(cbCategory.Text))
             {
-                MessageBox.Show("Please select a category.");
+                MessageBox.Show("Please select or enter a category.");
                 return;
             }
 
-            string desc = txtDescription.Text.Replace("'", "''");
 
-            string query =
-                "UPDATE Expenses SET " +
-                "Amount = " + amount + ", " +
-                "Category = '" + cbCategory.Text + "', " +
-                "ExpenseDate = '" + dtpDate.Value.ToString("yyyy-MM-dd") + "', " +
-                "Description = '" + desc + "' " +
-                "WHERE ExpenseID = " + currentID;
+            if (currentExpense == null)
+            {
+                currentExpense = Db.GetById<Expense>(currentID);
+                if (currentExpense == null)
+                {
+                    MessageBox.Show("Record not found.");
+                    this.Close();
+                    return;
+                }
+            }
 
-            Db.Execute(query);
+            currentExpense.Amount = amount;
+            currentExpense.Category = cbCategory.Text.Trim();
+            currentExpense.ExpenseDate = dtpDate.Value.Date;
+            currentExpense.Description = txtDescription.Text.Trim();
 
-            MessageBox.Show("Expense updated successfully!");
-            this.Close(); 
+
+            Db.Update(currentExpense);
+
+            MessageBox.Show("Expense updated successfully.");
+            this.Close();
         }
 
+        
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();

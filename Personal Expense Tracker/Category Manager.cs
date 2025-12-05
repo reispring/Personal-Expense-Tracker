@@ -19,38 +19,37 @@ namespace Personal_Expense_Tracker
         {
             listCategories.Items.Clear();
 
-            DataTable dt = Db.GetTable("SELECT * FROM Categories ORDER BY CategoryName ASC");
+            var categories = Db.GetAll<Category>()
+                               .OrderBy(c => c.CategoryName)
+                               .ToList();
 
-            foreach (DataRow row in dt.Rows)
+            foreach (var c in categories)
             {
-                // Example: "3 - Groceries"
-                listCategories.Items.Add(row["CategoryID"] + " - " + row["CategoryName"]);
+                listCategories.Items.Add($"{c.CategoryID} - {c.CategoryName}");
             }
         }
 
-        // ------------------------------------------------------------
-        // ADD CATEGORY
-        // ------------------------------------------------------------
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if (txtCategoryName.Text == "")
+            if (string.IsNullOrWhiteSpace(txtCategoryName.Text))
             {
                 MessageBox.Show("Please enter a category name.");
                 return;
             }
 
-            string name = txtCategoryName.Text;
+            Category cat = new Category()
+            {
+                CategoryName = txtCategoryName.Text.Trim()
+            };
 
-            Db.Execute($"INSERT INTO Categories (CategoryName) VALUES ('{name}')");
+            Db.Insert(cat);
 
             MessageBox.Show("Category added!");
             txtCategoryName.Clear();
             LoadCategories();
         }
 
-        // ------------------------------------------------------------
-        // DELETE CATEGORY
-        // ------------------------------------------------------------
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (listCategories.SelectedItem == null)
@@ -59,23 +58,25 @@ namespace Personal_Expense_Tracker
                 return;
             }
 
-            // Selected item sample: "3 - Groceries"
             string selected = listCategories.SelectedItem.ToString();
             int id = Convert.ToInt32(selected.Split('-')[0].Trim());
 
-            if (MessageBox.Show("Are you sure?", "Delete", MessageBoxButtons.YesNo)
-                == DialogResult.Yes)
-            {
-                Db.Execute($"DELETE FROM Categories WHERE CategoryID={id}");
+            var target = Db.GetById<Category>(id);
 
-                MessageBox.Show("Category deleted!");
+            if (target == null)
+            {
+                MessageBox.Show("Category not found.");
+                return;
+            }
+
+            if (MessageBox.Show("Delete this category?", "Confirm",
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Db.Delete(target);
                 LoadCategories();
             }
         }
 
-        // ------------------------------------------------------------
-        // CLOSE
-        // ------------------------------------------------------------
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();

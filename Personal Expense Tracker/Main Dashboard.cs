@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using System.Data;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Personal_Expense_Tracker
@@ -12,68 +12,64 @@ namespace Personal_Expense_Tracker
             InitializeComponent();
 
         }
-        
-        private void MainDashboard_Load(object sender, EventArgs e)
+        private void Main_Dashboard_Load(object sender, EventArgs e)
         {
             LoadExpenses();
         }
 
+
         private void LoadExpenses()
         {
-            DataTable dt = Db.GetTable("SELECT * FROM Expenses ORDER BY ExpenseDate DESC");
-            dgvExpenses.AutoGenerateColumns = true;
-            dgvExpenses.DataSource = dt;
+            var list = Db.GetAll<Expense>()
+                         .OrderByDescending(x => x.ExpenseDate)
+                         .ToList();
 
+            dgvExpenses.DataSource = list;
 
-            if (dgvExpenses.Columns.Contains("ExpenseID"))
-                dgvExpenses.Columns["ExpenseID"].Visible = false;
-
-            dgvExpenses.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            lblTotal.Text = "Total: ₱" + list.Sum(x => x.Amount).ToString("N2");
         }
 
-
-        private void btnAddExpense_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
             AddExpense f = new AddExpense();
             f.ShowDialog();
-            LoadExpenses(); // refresh
+            LoadExpenses();
         }
 
-
-        private void btnEditExpense_Click(object sender, EventArgs e)
+        private void btnEdit_Click(object sender, EventArgs e)
         {
             if (dgvExpenses.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Select an expense to edit.");
+                MessageBox.Show("Select a record.");
                 return;
             }
 
             int id = Convert.ToInt32(dgvExpenses.SelectedRows[0].Cells["ExpenseID"].Value);
 
-            Edit_Expense f = new Edit_Expense();
-            f.LoadExpense(id);
+            Edit_Expense f = new Edit_Expense(id);
             f.ShowDialog();
-
-            LoadExpenses(); 
+            LoadExpenses();
         }
 
 
-        private void btnDeleteExpense_Click(object sender, EventArgs e)
+        private void btnDelete_Click(object sender, EventArgs e)
         {
             if (dgvExpenses.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Select an expense to delete.");
+                MessageBox.Show("Select a record to delete.");
                 return;
             }
 
             int id = Convert.ToInt32(dgvExpenses.SelectedRows[0].Cells["ExpenseID"].Value);
 
-            DialogResult dr = MessageBox.Show("Delete this expense?", "Confirm",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            var expense = Db.GetById<Expense>(id);
 
-            if (dr == DialogResult.Yes)
+            if (expense == null) return;
+
+            if (MessageBox.Show("Delete this expense?", "Confirm", MessageBoxButtons.YesNo)
+                == DialogResult.Yes)
             {
-                Db.Execute("DELETE FROM Expenses WHERE ExpenseID=" + id);
+                Db.Delete(expense);
                 LoadExpenses();
             }
         }

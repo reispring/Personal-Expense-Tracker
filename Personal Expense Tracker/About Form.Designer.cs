@@ -99,7 +99,7 @@
             btnOK.TabIndex = 6;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
-            btnOK.Click += button1_Click;
+
             // 
             // About_Form
             // 

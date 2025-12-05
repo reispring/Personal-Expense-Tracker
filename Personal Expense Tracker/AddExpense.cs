@@ -19,23 +19,41 @@ namespace Personal_Expense_Tracker
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (txtAmount.Text == "" || cbCategory.Text == "")
+
+            if (string.IsNullOrWhiteSpace(txtAmount.Text))
             {
-                MessageBox.Show("Amount and Category are required.");
+                MessageBox.Show("Please enter amount.");
+                return;
+            }
+            if (!decimal.TryParse(txtAmount.Text.Trim(), out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Amount must be a positive number.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(cbCategory.Text))
+            {
+                MessageBox.Show("Please select or enter a category.");
                 return;
             }
 
-            string q = $@"
-                INSERT INTO Expenses (Amount, Category, ExpenseDate, Description)
-                VALUES ({txtAmount.Text}, '{cbCategory.Text}', 
-                '{dtpDate.Value:yyyy-MM-dd}', '{txtDescription.Text}')
-            ";
 
-            Db.Execute(q);
+            Expense exp = new Expense()
+            {
+                ExpenseDate = dtpDate.Value.Date,
+                Category = cbCategory.Text.Trim(),
+                Amount = amount,
+                Description = txtDescription.Text.Trim()
+            };
 
-            MessageBox.Show("Expense Saved.");
+
+            Db.Insert(exp);
+
+            MessageBox.Show("Expense added successfully!");
+
+
             this.Close();
         }
+
 
         private void btnCancel_Click(object sender, EventArgs e)
         {

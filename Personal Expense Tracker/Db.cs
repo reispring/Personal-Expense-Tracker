@@ -1,39 +1,72 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using SQLite;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Personal_Expense_Tracker
 {
     public static class Db
     {
-        private static readonly SqlConnection conn =
-            new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ExpenseDB;Integrated Security=True");
+        private static SQLiteConnection conn;
 
-        public static DataTable GetTable(string query)
+
+        public static void Init()
         {
-            DataTable dt = new DataTable();
+            string dbPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "expenses.db"
+            );
 
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
+            conn = new SQLiteConnection(dbPath);
 
-                dt.Load(cmd.ExecuteReader());
-                conn.Close();
-            }
-
-            return dt;
+            conn.CreateTable<Expense>();
+            conn.CreateTable<Category>();
         }
 
-        public static void Execute(string query)
+        public static int Insert(object item)
         {
-            using (SqlCommand cmd = new SqlCommand(query, conn))
-            {
-                if (conn.State != ConnectionState.Open)
-                    conn.Open();
-
-                cmd.ExecuteNonQuery();
-                conn.Close();
-            }
+            return conn.Insert(item);
         }
+
+        public static int Update(object item)
+        {
+            return conn.Update(item);
+        }
+
+        public static int Delete(object item)
+        {
+            return conn.Delete(item);
+        }
+
+
+        public static List<T> GetAll<T>() where T : new()
+        {
+            return conn.Table<T>().ToList();
+        }
+
+        public static T GetById<T>(int id) where T : new()
+        {
+            return conn.Find<T>(id);
+        }
+    }
+
+
+    public class Expense
+    {
+        [PrimaryKey, AutoIncrement]
+        public int ExpenseID { get; set; }
+
+        public DateTime ExpenseDate { get; set; }
+        public string Category { get; set; }
+        public decimal Amount { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class Category
+    {
+        [PrimaryKey, AutoIncrement]
+        public int CategoryID { get; set; }
+        public string CategoryName { get; set; }
     }
 }
