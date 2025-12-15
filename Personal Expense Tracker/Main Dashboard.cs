@@ -79,5 +79,15 @@ namespace Personal_Expense_Tracker
         {
             LoadExpenses();
         }
+
+        private void btnPrintReport_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAbout_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

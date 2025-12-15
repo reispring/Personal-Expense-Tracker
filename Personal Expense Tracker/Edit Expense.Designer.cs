@@ -59,6 +59,7 @@
             btnCancel.TabIndex = 20;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // btnUpdate
             // 
@@ -68,6 +69,7 @@
             btnUpdate.TabIndex = 19;
             btnUpdate.Text = "Update";
             btnUpdate.UseVisualStyleBackColor = true;
+            btnUpdate.Click += btnUpdate_Click;
             // 
             // txtDescription
             // 

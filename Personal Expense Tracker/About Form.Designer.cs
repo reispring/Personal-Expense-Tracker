@@ -99,7 +99,6 @@
             btnOK.TabIndex = 6;
             btnOK.Text = "OK";
             btnOK.UseVisualStyleBackColor = true;
-
             // 
             // About_Form
             // 
@@ -115,6 +114,7 @@
             Controls.Add(label1);
             Name = "About_Form";
             Text = "About_Form";
+            Click += btnClose_Click;
             ResumeLayout(false);
             PerformLayout();
         }

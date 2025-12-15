@@ -39,72 +39,68 @@
             // lblCategory
             // 
             lblCategory.AutoSize = true;
-            lblCategory.Location = new Point(59, 45);
+            lblCategory.Location = new Point(67, 60);
             lblCategory.Name = "lblCategory";
-            lblCategory.Size = new Size(93, 15);
+            lblCategory.Size = new Size(116, 20);
             lblCategory.TabIndex = 0;
             lblCategory.Text = "Category Name:";
             // 
             // txtCategoryName
             // 
-            txtCategoryName.Location = new Point(180, 40);
-            txtCategoryName.Margin = new Padding(3, 2, 3, 2);
+            txtCategoryName.Location = new Point(206, 53);
             txtCategoryName.Name = "txtCategoryName";
-            txtCategoryName.Size = new Size(110, 23);
+            txtCategoryName.Size = new Size(125, 27);
             txtCategoryName.TabIndex = 1;
             // 
             // btnAdd
             // 
-            btnAdd.Location = new Point(59, 87);
-            btnAdd.Margin = new Padding(3, 2, 3, 2);
+            btnAdd.Location = new Point(67, 116);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(82, 22);
+            btnAdd.Size = new Size(94, 29);
             btnAdd.TabIndex = 2;
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.Click += btnAdd_Click;
             // 
             // btnDelete
             // 
-            btnDelete.Location = new Point(207, 87);
-            btnDelete.Margin = new Padding(3, 2, 3, 2);
+            btnDelete.Location = new Point(237, 116);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(82, 22);
+            btnDelete.Size = new Size(94, 29);
             btnDelete.TabIndex = 3;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // listCategories
             // 
             listCategories.FormattingEnabled = true;
-            listCategories.ItemHeight = 15;
-            listCategories.Location = new Point(59, 136);
-            listCategories.Margin = new Padding(3, 2, 3, 2);
+            listCategories.Location = new Point(67, 181);
             listCategories.Name = "listCategories";
-            listCategories.Size = new Size(232, 79);
+            listCategories.Size = new Size(265, 104);
             listCategories.TabIndex = 4;
             // 
             // btnClose
             // 
-            btnClose.Location = new Point(137, 234);
-            btnClose.Margin = new Padding(3, 2, 3, 2);
+            btnClose.Location = new Point(157, 312);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(82, 22);
+            btnClose.Size = new Size(94, 29);
             btnClose.TabIndex = 5;
             btnClose.Text = "Close";
             btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // Category_Manager
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(346, 303);
+            ClientSize = new Size(395, 404);
             Controls.Add(btnClose);
             Controls.Add(listCategories);
             Controls.Add(btnDelete);
             Controls.Add(btnAdd);
             Controls.Add(txtCategoryName);
             Controls.Add(lblCategory);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "Category_Manager";
             Text = "Category_Manager";
             ResumeLayout(false);

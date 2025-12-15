@@ -125,6 +125,7 @@
             btnSave.TabIndex = 9;
             btnSave.Text = "Save";
             btnSave.UseVisualStyleBackColor = true;
+            btnSave.Click += btnSave_Click;
             // 
             // btnCancel
             // 
@@ -134,6 +135,7 @@
             btnCancel.TabIndex = 10;
             btnCancel.Text = "Cancel";
             btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // AddExpense
             // 
@@ -153,7 +155,6 @@
             Controls.Add(lblHeader);
             Name = "AddExpense";
             Text = "AddExpense";
-
             ResumeLayout(false);
             PerformLayout();
         }
