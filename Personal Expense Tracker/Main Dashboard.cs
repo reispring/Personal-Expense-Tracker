@@ -82,12 +82,14 @@ namespace Personal_Expense_Tracker
 
         private void btnPrintReport_Click(object sender, EventArgs e)
         {
-
+            View_Report report = new View_Report();
+            report.ShowDialog();
         }
 
         private void btnAbout_Click(object sender, EventArgs e)
         {
-
+            About_Form about = new About_Form();
+            about.ShowDialog();
         }
     }
 }

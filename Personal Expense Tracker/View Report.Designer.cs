@@ -89,7 +89,7 @@
             btnFilter.TabIndex = 6;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = true;
-
+            btnFilter.Click += btnFilter_Click;
             // 
             // btnPrint
             // 
@@ -99,15 +99,18 @@
             btnPrint.TabIndex = 7;
             btnPrint.Text = "Print";
             btnPrint.UseVisualStyleBackColor = true;
+            btnPrint.Click += btnPrint_Click;
             // 
             // dgvReport
             // 
             dgvReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvReport.Location = new Point(23, 128);
             dgvReport.Name = "dgvReport";
+            dgvReport.ReadOnly = true;
             dgvReport.RowHeadersWidth = 51;
             dgvReport.Size = new Size(700, 188);
             dgvReport.TabIndex = 8;
+            dgvReport.Click += View_Report_Load;
             // 
             // View_Report
             // 

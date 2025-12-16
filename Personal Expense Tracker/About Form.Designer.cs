@@ -34,7 +34,7 @@
             lblDeveloper = new Label();
             lblPurpose = new Label();
             lblContact = new Label();
-            btnOK = new Button();
+            btnClose = new Button();
             SuspendLayout();
             // 
             // label1
@@ -91,21 +91,22 @@
             lblContact.TabIndex = 5;
             lblContact.Text = "Contact: BadereCutaran@gmail.com";
             // 
-            // btnOK
+            // btnClose
             // 
-            btnOK.Location = new Point(182, 273);
-            btnOK.Name = "btnOK";
-            btnOK.Size = new Size(94, 29);
-            btnOK.TabIndex = 6;
-            btnOK.Text = "OK";
-            btnOK.UseVisualStyleBackColor = true;
+            btnClose.Location = new Point(182, 273);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(94, 29);
+            btnClose.TabIndex = 6;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // About_Form
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(455, 353);
-            Controls.Add(btnOK);
+            Controls.Add(btnClose);
             Controls.Add(lblContact);
             Controls.Add(lblPurpose);
             Controls.Add(lblDeveloper);
@@ -127,6 +128,6 @@
         private Label lblDeveloper;
         private Label lblPurpose;
         private Label lblContact;
-        private Button btnOK;
+        private Button btnClose;
     }
 }

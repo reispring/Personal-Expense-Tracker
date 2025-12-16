@@ -79,6 +79,7 @@
             // cbCategory
             // 
             cbCategory.FormattingEnabled = true;
+            cbCategory.Items.AddRange(new object[] { "Transportation", "Food", "Personal Care", "Education", "Utilities", "Entertainment", "Savings" });
             cbCategory.Location = new Point(165, 114);
             cbCategory.Name = "cbCategory";
             cbCategory.Size = new Size(250, 28);

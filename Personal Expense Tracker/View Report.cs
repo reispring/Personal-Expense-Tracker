@@ -59,24 +59,63 @@ namespace Personal_Expense_Tracker
         private void PrintPage(object sender, PrintPageEventArgs e)
         {
             int y = 50;
+            int left = 50;
 
-            e.Graphics.DrawString("Expense Report", new Font("Arial", 18, FontStyle.Bold),
-                Brushes.Black, new PointF(50, y));
+            Font headerFont = new Font("Arial", 16, FontStyle.Bold);
+            Font rowFont = new Font("Arial", 10);
 
+            
+            e.Graphics.DrawString("Expense Report", headerFont, Brushes.Black, left, y);
             y += 40;
 
+           
+            e.Graphics.DrawString("Date", rowFont, Brushes.Black, left, y);
+            e.Graphics.DrawString("Category", rowFont, Brushes.Black, left + 120, y);
+            e.Graphics.DrawString("Amount", rowFont, Brushes.Black, left + 300, y);
+            y += 25;
+
+            e.Graphics.DrawLine(Pens.Black, left, y, left + 400, y);
+            y += 10;
+
+            
             foreach (DataGridViewRow row in dgvReport.Rows)
             {
-                string line =
-                    $"{row.Cells["ExpenseDate"].Value} | " +
-                    $"{row.Cells["Category"].Value} | " +
-                    $"{row.Cells["Amount"].Value}";
+                
+                if (row.IsNewRow) continue;
 
-                e.Graphics.DrawString(line, new Font("Arial", 10),
-                    Brushes.Black, new PointF(50, y));
+                string date = row.Cells["ExpenseDate"].Value?.ToString() ?? "";
+                string category = row.Cells["Category"].Value?.ToString() ?? "";
+                string amount = row.Cells["Amount"].Value?.ToString() ?? "";
+
+                e.Graphics.DrawString(date, rowFont, Brushes.Black, left, y);
+                e.Graphics.DrawString(category, rowFont, Brushes.Black, left + 120, y);
+                e.Graphics.DrawString(amount, rowFont, Brushes.Black, left + 300, y);
 
                 y += 20;
+
+                
+                if (y > e.MarginBounds.Bottom)
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
             }
+
+            e.HasMorePages = false;
         }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            DateTime from = dtpFrom.Value.Date;
+            DateTime to = dtpTo.Value.Date;
+
+            var data = Db.GetAll<Expense>()
+                         .Where(x => x.ExpenseDate >= from && x.ExpenseDate <= to)
+                         .OrderBy(x => x.ExpenseDate)
+                         .ToList();
+
+            dgvReport.DataSource = data;
+        }
+
     }
 }
